@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacts List</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+    <header class="main-header">
+        <nav class="main-header__nav">
+            <ul class="main-header__item-list">
+                <li class="main-header__item"><a href='/shop'>Shop</a></li>
+                <li class="main-header__item"><a href='/admin/add-product'>Add Product</a></li>
+                <li class="main-header__item"><a class="active" href='/contacts'>Contacts</a></li>
+                <li class="main-header__item"><a href='/contacts'>Contacts</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Contacts</h1>
+        <ul>
+            <% contacts.forEach(contact=>{ %>
+                <li><a href='/contacts/<%= contact.id %>'>
+                        <%=contact.name %>
+                            <form action="/delete-contact" method="post">
+                                <input type='hidden' name='contactId' value='<%= contact.id %>'>
+                                <button type="submit">Delete</button>
+                            </form>
+
+                            <a href="/edit-contact/<%= contact.id %>?edit=true">
+                                <button>Edit</button>
+                            </a>
+                    </a></li>
+                <% }); %>
+        </ul>
+    </main>
+</body>
+
+</html>

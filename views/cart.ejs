@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+    <header class="main-header">
+        <nav class="main-header__nav">
+            <ul class="main-header__item-list">
+                <li class="main-header__item"><a href='/shop'>Shop</a></li>
+                <li class="main-header__item"><a href='/admin/add-product'>Add Product</a></li>
+                <li class="main-header__item"><a href='/contacts'>Contacts</a></li>
+                <li class="main-header__item"><a class="active" href='/cart'>Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Your Cart</h1>
+        <ul>
+            <% cartProducts.forEach(cartProduct=> { %>
+                <li>
+                    <%= cartProduct.productData.title %> (x<%= cartProduct.qty %>) - $<%= cartProduct.productData.price
+                                %>
+                                <form action='/delete-from-cart' method="post">
+                                    <input type='hidden' name='cartProductId' value="<%= cartProduct.productData.id %>">
+                                    <button type='submit'>Delete</button>
+                                </form>
+                                <form action="/update-cart?cartProductId=<%=cartProduct.productData.id %>"
+                                    method="post">
+                                    <input type='number' name='newQty' value="<%= cartProduct.qty %>" min="1">
+                                    <button type="submit>">Update</button>
+                                </form>
+                </li>
+                <% }); %>
+        </ul>
+        <h2>Total price: $<%= totalPrice %>
+        </h2>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Contact</title>
+</head>
+
+<body>
+    <header class="main-header">
+        <nav class="main-header__nav">
+            <ul class="main-header__item-list">
+                <li class="main-header__item"><a href='/shop'>Shop</a></li>
+                <li class="main-header__item"><a href='/admin/add-product'>Add Product</a></li>
+                <li class="main-header__item"><a href='/contacts'>Contacts</a></li>
+                <li class="main-header__item"><a href='/cart'>Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Edit Contact</h1>
+        <form action='/edit-contact' method='post'>
+            <input type='hidden' name='contactId' value="<%= contact.id %>">
+            <label for="name">Name: </label>
+            <input type="text" name="name" id="name" value="<%= contact.name %>">
+            <label for="email">Email: </label>
+            <input type="email" name="email" id="name" value="<%= contact.email %>">
+            <label for="phone">Phone: </label>
+            <input type="tel" name="phone" id="phone" value="<%= contact.phone %>">
+            <label>
+                Time for Call:
+                <input type="date" id="date" name="date" value="<%= contact.date %>">
+                <input type="time" id="time" name="time" value="<%= contact.time %>">
+            </label>
+            <button type="submit">Save</button>
+        </form>
+    </main>
+</body>
+
+</html>
