@@ -7,6 +7,18 @@ exports.getContactUs = (req, res) => {
   res.sendFile(path.join(rootDir, "views", "contact-us.html"));
 };
 
+// exports.postContactUs = (req, res) => {
+//   const contact = new Contact(
+//     req.body.name,
+//     req.body.email,
+//     req.body.phone,
+//     req.body.date,
+//     req.body.time
+//   );
+//   contact.save();
+//   res.redirect("/success");
+// };
+
 exports.postContactUs = (req, res) => {
   const contact = new Contact(
     req.body.name,
@@ -15,30 +27,60 @@ exports.postContactUs = (req, res) => {
     req.body.date,
     req.body.time
   );
-  contact.save();
-  res.redirect("/success");
+  contact
+    .save()
+    .then(() => {
+      res.redirect("/success");
+    })
+    .catch((err) => console.log(err));
 };
 
+// exports.getContacts = (req, res) => {
+//   Contact.fetchAll((contacts) => {
+//     res.render("contacts", {
+//       contacts: contacts,
+//     });
+//   });
+// };
+
 exports.getContacts = (req, res) => {
-  Contact.fetchAll((contacts) => {
-    res.render("contacts", {
-      contacts: contacts,
+  Contact.fetchAll()
+    .then((contacts) => {
+      console.log(contacts);
+      res.render("contacts", {
+        contacts: contacts[0],
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  });
 };
+
+// exports.getContact = (req, res) => {
+//   const contactId = req.params.contactId;
+//   Contact.fetchAll((contacts) => {
+//     const contact = contacts.find((c) => c.id === contactId);
+//     if (contact) {
+//       res.render("contact-details", {
+//         contact: contact,
+//       });
+//     } else {
+//       res.status(404).send("Contact not found");
+//     }
+//   });
+// };
 
 exports.getContact = (req, res) => {
   const contactId = req.params.contactId;
-  Contact.fetchAll((contacts) => {
-    const contact = contacts.find((c) => c.id === contactId);
-    if (contact) {
+  Contact.findById(contactId)
+    .then(([contact]) => {
       res.render("contact-details", {
-        contact: contact,
+        contact: contact[0],
       });
-    } else {
-      res.status(404).send("Contact not found");
-    }
-  });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.getEditContact = (req, res) => {

@@ -2,6 +2,8 @@ const path = require("path");
 
 const fs = require("fs");
 
+const db = require("../util/database");
+
 const rootDir = require("../util/path");
 
 const p = path.join(rootDir, "data", "contacts.json");
@@ -34,32 +36,43 @@ module.exports = class Contact {
   //   });
   // }
 
+  // save() {
+  //   getContactsFromFile((contacts) => {
+  //     if (this.id) {
+  //       const existingContactIndex = contacts.findIndex(
+  //         (c) => c.id === this.id
+  //       );
+  //       const updatedContacts = [...contacts];
+  //       updatedContacts[existingContactIndex] = this;
+  //       fs.writeFile(p, JSON.stringify(updatedContacts), (err) => {
+  //         console.log(err);
+  //       });
+  //     } else {
+  //       this.id = Math.random().toString();
+  //       contacts.push(this);
+  //       fs.writeFile(p, JSON.stringify(contacts), (err) => {
+  //         console.log(err);
+  //       });
+  //     }
+  //   });
+  // }
+
   save() {
-    getContactsFromFile((contacts) => {
-      if (this.id) {
-        const existingContactIndex = contacts.findIndex(
-          (c) => c.id === this.id
-        );
-        const updatedContacts = [...contacts];
-        updatedContacts[existingContactIndex] = this;
-        fs.writeFile(p, JSON.stringify(updatedContacts), (err) => {
-          console.log(err);
-        });
-      } else {
-        this.id = Math.random().toString();
-        contacts.push(this);
-        fs.writeFile(p, JSON.stringify(contacts), (err) => {
-          console.log(err);
-        });
-      }
-    });
+    return db.execute(
+      "INSERT INTO contacts(name, email, phone, date, time) VALUES(?,?,?,?,?)",
+      [this.name, this.email, this.phone, this.date, this.time]
+    );
   }
 
-  static findById(id, cb) {
-    getContactsFromFile((contacts) => {
-      const contact = contacts.find((c) => c.id === id);
-      cb(contact);
-    });
+  // static findById(id, cb) {
+  //   getContactsFromFile((contacts) => {
+  //     const contact = contacts.find((c) => c.id === id);
+  //     cb(contact);
+  //   });
+  // }
+
+  static findById(id) {
+    return db.execute("SELECT * FROM contacts WHERE contacts.id=?", [id]);
   }
 
   static deleteById(id, cb) {
@@ -74,7 +87,11 @@ module.exports = class Contact {
     });
   }
 
-  static fetchAll(cb) {
-    getContactsFromFile(cb);
+  // static fetchAll(cb) {
+  //   getContactsFromFile(cb);
+  // }
+
+  static fetchAll() {
+    return db.execute("SELECT * FROM contacts");
   }
 };
